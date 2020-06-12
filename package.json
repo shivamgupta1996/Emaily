@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --inspect index.js"
+    "dev": "nodemon index.js"
   },
   "author": "Shivam Gupta",
   "license": "ISC",
