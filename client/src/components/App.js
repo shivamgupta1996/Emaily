@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route } from "react-router-dom"
 import { connect } from "react-redux"
-import {fetchUser} from "../actions"
-// import * as actions from "../actions"
-
+import * as actions from "../actions"
+import Landing from './Landing'
 import Header from "./Header"
+
 const Dashboard = () => <h2>Dashboard</h2>
 const SurveyNew = () => <h2>SurveyNew</h2>
-const Landing = () => <h2>Landing</h2>
 
 class App extends Component {
     componentDidMount() {
@@ -30,10 +29,4 @@ class App extends Component {
     }
 }
 
-/* const mapStateToProps = (state) => {
-    return {
-        auth: state.auth
-    }
-} */
-
-export default connect(null, {fetchUser})(App)
+export default connect(null, actions)(App)
