@@ -1,6 +1,3 @@
-/**
- * Business logic
- */
 const passport = require("passport")
 const GoogleStratergy = require("passport-google-oauth20").Strategy
 const keys = require("../config/keys")
@@ -22,6 +19,7 @@ passport.deserializeUser((id, done) => {
         done(null, user)
     })
 })
+
 //Registering and configuring oauth stratergy
 passport.use(
     new GoogleStratergy(
@@ -31,25 +29,20 @@ passport.use(
             callbackURL: "/auth/google/callback", //route user to this URL when user grants permission
             proxy: true
         },
-        (accessToken, refreshToken, profile, done) => {
+        async (accessToken, refreshToken, profile, done) => {
             //gets called when oauth process is successful
             //accessToken - proves that we are allowed to access user's info
             //refreshToken - allows refresh of accessToken
-            User.findOne({ googleId: profile.id })
-                .then((existingUser) => {
-                    if (existingUser) {
-                        //We already have a record with a given profile ID
-                        done(null, existingUser) //Required to tell Passport stratergy that auth has been done
-                    } else {
-                        //We do not already have a record with a given profile ID
-                        new User({ googleId: profile.id })
-                            .save() //Create new record in 'users' collection
-                            .then((user) => done(null, user))
-                    }
-                })
-                .catch((error) => {
-                    console.log("DB ERROR::", error)
-                })
+
+            const existingUser = await User.findOne({ googleId: profile.id })
+            if (existingUser) {
+                //We already have a record with a given profile ID
+                return done(null, existingUser) //Required to tell Passport stratergy that auth has been done
+            }
+
+            //We do not already have a record with a given profile ID
+            const user = await new User({ googleId: profile.id }).save() //Create new record in 'users' collection
+            done(null, user)
         }
     )
 )
