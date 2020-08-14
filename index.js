@@ -7,6 +7,7 @@ const bodyParser = require("body-parser")
 
 //Loading Configurations
 require("./models/User")
+require("./models/Survey")
 require("./services/passport")
 
 mongoose.connect(keys.mongoURI)
